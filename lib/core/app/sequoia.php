@@ -2,26 +2,24 @@
 class Sequoia
 {
 
-    private $controller;
+    /**
+     * @var SConfig
+     */
+    private $config;
 
-    public function __constructor()
+    public function __construct(SConfig $config)
     {
-
+        $this->config = $config;
     }
 
-    public function init($config = null)
+    public function init()
     {
-        $application = $_GET['app'];
-        $controller = isset($_GET['controller']) ? $_GET['controller'] : 'def';
-        $this->controller = $this->getController($application, $controller);
+        $application = isset($_GET['app']) ? $_GET['app'] : $this->config->defaultApp;
+        $this->getApp($application);
     }
 
-    private function getController($app, $controllerName)
+    private function getApp($appName)
     {
-        $path =  BASE . DS . 'app' . DS . $app . DS . 'controllers' . DS . $controllerName . '.php';
-        echo $path;
-        require $path;
-        $controllerClass = ucfirst($controllerName);
-        return new $controllerClass();
+        require APP . DS . $appName . DS . $appName . '.php';
     }
 }
